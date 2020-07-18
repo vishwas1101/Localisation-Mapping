@@ -1,7 +1,6 @@
 %HELP TAKEN FROM THE BOOK OF "WHEELED MOBILE ROBOTICS" 
 
 %GENERATING RANDOM ENVIRONMENT WITH OBTACLE - START
-
 noObs = 10; %enter the number of obstacles 
 minDimObs = [0.1; 0.1]; %enter min dimension of obstacle (xmin, ymin)
 maxDimObs = [2; 2]; %enter max dimension of obstacle (xmax,ymax)
@@ -27,7 +26,6 @@ for i = 1:noObs
 end
 
 %disp(obstacle);
-
 
 %IMPROVEMENT: THE OBSTACLE MIGHT OVERLAP (ALTHOUGH IT DOESNT CAUSE A
 %PROBLEM) IT RENDERS THE EXECUTION LESS EFFECIENT.
