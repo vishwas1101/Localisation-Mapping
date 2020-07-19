@@ -32,9 +32,13 @@ end
 
 %the inverse observation model i.e to tranformed a already scanned point to
 %the world frame with the known measurement
-function [point, jacPoint_rFrame, jacPoint_scanPoint] = inverseObserve(rFrame, scanPoint)
+function [newPoint, jacPoint_rFrame, jacPoint_scanPoint] = inverseObserve(rFrame, scanPoint)
 
+[point, jacPR_ScanPoint] = inverseObserve(scanPoint);
 
+[newPoint, jacPoint_rFrame, jacNewPoint_point] = localToGlobal(rFrame, point);
+
+jacPoint_scanPoint = jacNewPoint_point * jacPR_ScanPoint;
 
 end
 
