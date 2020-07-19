@@ -10,14 +10,45 @@ disp(newPoint);
 %disp(jacPF_p);
 
 
+%rFrame is the robot frame
+%scanPoint is the range/bearing mesurement
+
+
+%SLAM Operations
+
+%Direct observation model i.e. to transform a point by scanning it into the
+%robot frame and take a measurement
+function [scanPoint, jacScanPoint_rFrame, jacScanPoint_point] = directObserve(rFrame, point)
+
+[newPoint, jacPF_rFrame, jacPF_point] = globalToLocal(rFrame, point);
+
+[scanPoint, jacScanPoint_newPoint] = scan(newPoint);
+
+jacScanPoint_rFrame = jacScanPoint_newPoint * jacPF_rFrame;
+jacScanPoint_point = jacScanPoint_newPoint * jacPF_point;
+
+end 
+
+
+%the inverse observation model i.e to tranformed a already scanned point to
+%the world frame with the known measurement
+function [point, jacPoint_rFrame, jacPoint_scanPoint] = inverseObserve(rFrame, scanPoint)
+
+
+
+end
+
 %F is the new reference frame the point is being transformed to
-%p is the point in the global frame 
-%new point is the point in frame F
+%point is a point in the global frame 
+%newPoint is the point in frame F
 %jacPF_f is the jacobian wrt frame F
 %jacPF_point is the jacobian wrt the point 
+%scanPoint is the point scanned by the sensor
+%jacScanPoint_point is the jacobian wrt the point 
+%jacPoint)scanPoint is the jacobian wrt the scanned point
 
 
-%4 basic functions i.e they are geomatric functions that will be used to
+%Four basic functions i.e they are geomatric functions that will be used to
 %perform 2D SLAM. They are the functions that are used to change the frame
 %from body frame to world frame or vice versa and scanning a 2D point or
 %projecting back the 2D point to the space
@@ -93,15 +124,17 @@ end
 
 
 %project back the scanned point
-function [point, jacpoint_ScanPoint] = project(scanPoint)
+function [point, jacPoint_ScanPoint] = project(scanPoint)
 
 x = scanPoint(1) * cos(scanPoint(2));
 y = scanPoint(1) * sin(scanPoint(2));
 
 point  = [x; y];
 
-jacpoint_ScanPoint = [...
+jacPoint_ScanPoint = [...
     [cos(scanPoint(2)), -scanPoint(1)*sin(scanPoint(2))]
     [sin(scanPoint(2)), -scanPoint(1)*cos(scanPoint(2))]];
 
 end 
+
+
