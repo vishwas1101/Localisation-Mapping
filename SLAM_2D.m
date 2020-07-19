@@ -17,6 +17,11 @@ disp(newPoint);
 %jacPF_point is the jacobian wrt the point 
 
 
+%4 basic functions i.e they are geomatric functions that will be used to
+%perform 2D SLAM. They are the functions that are used to change the frame
+%from body frame to world frame or vice versa and scanning a 2D point or
+%projecting back the 2D point to the space
+
 %transforming a point in a global frame in a local frame
 function [newPoint, jacPF_f, jacPF_point] = globalToLocal(F, point)
 
@@ -72,4 +77,31 @@ jacPW_point = [...
 
 end 
 
+%reading 2D point from sensor
+function [scanPoint, jacScanPoint_point] = scan(point)
 
+x = point(1);
+y = point(2);
+
+scanPoint = [sqrt(x^2 + y^2) ; atan2(y,x)];
+
+jacScanPoint_point = [...
+    [x/sqrt(x^2 + y^2), y/sqrt(x^2 +y^2)]
+    [-y/(x^2 * ((y^2)/(x^2) + 1)), 1/(x^2 * ((y^2)/(x^2) + 1))]];
+
+end 
+
+
+%project back the scanned point
+function [point, jacpoint_ScanPoint] = project(scanPoint)
+
+x = scanPoint(1) * cos(scanPoint(2));
+y = scanPoint(1) * sin(scanPoint(2));
+
+point  = [x; y];
+
+jacpoint_ScanPoint = [...
+    [cos(scanPoint(2)), -scanPoint(1)*sin(scanPoint(2))]
+    [sin(scanPoint(2)), -scanPoint(1)*cos(scanPoint(2))]];
+
+end 
