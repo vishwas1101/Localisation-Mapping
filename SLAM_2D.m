@@ -29,7 +29,6 @@ jacScanPoint_point = jacScanPoint_newPoint * jacPF_point;
 
 end 
 
-
 %the inverse observation model i.e to tranformed a already scanned point to
 %the world frame with the known measurement
 function [newPoint, jacPoint_rFrame, jacPoint_scanPoint] = inverseObserve(rFrame, scanPoint)
